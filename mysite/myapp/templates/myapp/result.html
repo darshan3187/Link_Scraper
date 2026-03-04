@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Collector</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+    <div class="container mx-auto mt-10 px-4">
+        <h1 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8">Link Collector</h1>
+
+        <!-- Form row -->
+        <div class="flex flex-col md:flex-row justify-center items-center mb-8 gap-4">
+            <form method="POST" action="/" class="flex w-full md:w-2/3">
+                {% csrf_token %}
+                <input type="text" name="site" id="site" placeholder="Enter site address" 
+                       class="flex-grow px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required>
+                <button type="submit" 
+                        class="px-6 py-2 bg-indigo-600 text-white font-medium rounded-r-md hover:bg-indigo-700 transition">
+                    Scrape
+                </button>
+            </form>
+
+            <a href="/delete" 
+               class="px-6 py-2 bg-red-500 text-white font-medium rounded-md hover:bg-red-600 transition">
+                Delete All
+            </a>
+        </div>
+
+        <!-- Links table -->
+        <div class="overflow-x-auto">
+            {% if data %}
+                <table class="min-w-full border border-gray-200 bg-white shadow-md rounded-lg overflow-hidden">
+                    <thead class="bg-indigo-600 text-white">
+                        <tr>
+                            <th class="px-4 py-2 text-left">ID</th>
+                            <th class="px-4 py-2 text-left">Name</th>
+                            <th class="px-4 py-2 text-left">Link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for link in data %}
+                        <tr class="border-b hover:bg-gray-50 transition">
+                            <td class="px-4 py-2">{{ link.id }}</td>
+                            <td class="px-4 py-2">{{ link.name }}</td>
+                            <td class="px-4 py-2">
+                                <a href="{{ link.address }}" target="_blank" class="text-indigo-600 hover:underline">
+                                    {{ link.address }}
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-center text-gray-500 mt-6">No links collected yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+</html>
